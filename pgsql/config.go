@@ -17,6 +17,15 @@ type Server struct {
 	DBName   string `env:""`
 }
 
+func (s *Server) SetDefaults() {
+	if s.Host == "" {
+		s.Host = "127.0.0.1"
+	}
+	if s.Port == 0 {
+		s.Port = 5432
+	}
+}
+
 func (s *Server) DB() *gorm.DB {
 	dsn := s.dsn()
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
