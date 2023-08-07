@@ -15,6 +15,8 @@ type Server struct {
 	Username string `env:""`
 	Password string `env:""`
 	DBName   string `env:""`
+
+	db *gorm.DB
 }
 
 func (s *Server) SetDefaults() {
@@ -26,7 +28,7 @@ func (s *Server) SetDefaults() {
 	}
 }
 
-func (s *Server) DB() *gorm.DB {
+func (s *Server) Initialize() {
 	dsn := s.dsn()
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -48,7 +50,7 @@ func (s *Server) DB() *gorm.DB {
 		panic(err)
 	}
 
-	return db
+	s.db = db
 }
 
 func (s *Server) dsn() string {
@@ -58,4 +60,8 @@ func (s *Server) dsn() string {
 		s.Host, s.Port,
 		s.DBName,
 	)
+}
+
+func (s *Server) DB() *gorm.DB {
+	return s.db
 }
