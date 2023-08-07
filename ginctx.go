@@ -7,7 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func InjectGinContext(db *gorm.DB) gin.HandlerFunc {
+// InjectToGinContext Middleware
+func InjectToGinContext(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 		ctx = WithContext(ctx, db)
@@ -17,7 +18,8 @@ func InjectGinContext(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func ExtractGinContext(ctx context.Context) *gorm.DB {
+// ExtractGinContext from gin Context
+func ExtracFromGinContext(ctx context.Context) *gorm.DB {
 
 	ginctx, ok := ctx.(*gin.Context)
 	if ok {
